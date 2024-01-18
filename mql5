@@ -1,0 +1,103 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                                      HFT Pro MT5 |
+//|                                    https://www.forexroboteasy.com |
+//|                                            Developed by Forex Robot Easy Team |
+//|------------------------------------------------------------------|
+//|                        Terms of Reference for Writing Code for HFT Pro MT5 |
+//|------------------------------------------------------------------|
+//| 1. Develop a unique combination of price action analysis and complex pending order management for HFT Pro MT5. |
+//| 2. Implement a tight stop-loss mechanism to ensure sustained equity growth in HFT Pro MT5. |
+//| 3. Design the software to assist traders in passing the evaluation stage of proprietary trading firms that allow HFT strategies. |
+//| 4. Ensure compatibility of HFT Pro MT5 with funded accounts and standard broker live accounts. |
+//| 5. Create a feature to open and close trades within seconds to take advantage of rapid fluctuations in the Forex market. |
+//| 6. Develop a sophisticated pending order and stop-loss management system in HFT Pro MT5. |
+//| 7. Limit the number of open trades in HFT Pro MT5 to improve trading efficiency. |
+//| 8. Adhere to the designated code requirements and implement the necessary trading functions. |
+//| 9. Provide a technical specification that only includes essential trading functions. |
+//| 10. Keep the terms of reference within a character limit of 1500-2000 characters. |
+//+------------------------------------------------------------------+
+#property copyright 'Forex Robot Easy Team'
+#property link      'https://www.forexroboteasy.com'
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+   // Price action analysis
+   double currentPrice = MarketInfo(Symbol(),MODE_BID);
+   // Perform analysis and make trading decisions based on price action
+
+   // Complex pending order management
+   if (currentPrice > 1.0)
+   {
+      double pendingOrderPrice = NormalizeDouble(currentPrice - 0.01, Digits);
+      int slippage = 3;
+      int ticket = OrderSend(Symbol(), OP_BUYSTOP, 0.1, pendingOrderPrice, slippage, 0, 0, 'Buy Stop', 0, 0, Green);
+      if(ticket > 0)
+      {
+         // Pending order placed successfully
+         // Implement additional logic for managing pending orders
+      }
+   }
+
+   // Tight stop-loss mechanism
+   double stopLossPrice = NormalizeDouble(currentPrice - 0.05, Digits);
+   int stopLoss = 50;
+   int stopLossTicket = OrderSend(Symbol(), OP_SELL, 0.1, 0, stopLoss, stopLossPrice, 0, 'Stop Loss', 0, 0, Red);
+   if(stopLossTicket > 0)
+   {
+      // Stop loss order placed successfully
+      // Implement additional logic for managing stop loss orders
+   }
+
+   // Open and close trades within seconds
+   if (currentPrice > 1.0)
+   {
+      int slippage = 3;
+      int ticket = OrderSend(Symbol(), OP_BUY, 0.1, currentPrice, slippage, 0, 0, 'Buy', 0, 0, Green);
+      if(ticket > 0)
+      {
+         // Trade placed successfully
+         Sleep(1000); // Wait for a second
+         bool closeResult = OrderClose(ticket, 0.1, currentPrice, slippage, Red);
+         if(closeResult)
+         {
+            // Trade closed successfully
+            // Implement additional logic for managing open and close positions
+         }
+      }
+   }
+
+   // Pending order and stop-loss management system
+   // Implement a sophisticated system for managing pending orders and stop-loss orders
+
+   // Limit number of open trades
+   int maxOpenTrades = 5;
+   int openTrades = 0;
+   for(int i=OrdersTotal()-1; i>=0; i--)
+   {
+      if(OrderSelect(i, SELECT_BY_POS, MODE_TRADES))
+      {
+         if(OrderSymbol() == Symbol() && OrderType() <= OP_SELL)
+         {
+            openTrades++;
+            if(openTrades > maxOpenTrades)
+            {
+               // Close the oldest open position
+               bool closeResult = OrderClose(OrderTicket(), OrderLots(), OrderClosePrice(), slippage, Red);
+               if(closeResult)
+               {
+                  // Position closed successfully
+                  // Implement additional logic for managing open positions
+               }
+            }
+         }
+      }
+   }
+
+   // Additional code for the necessary trading functions
+   // Implement the required trading functions based on the technical specification
+}
+//+------------------------------------------------------------------+
